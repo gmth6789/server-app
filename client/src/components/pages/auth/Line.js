@@ -15,7 +15,7 @@ const Line = () => {
   useEffect(() => {
     const initLiff = async () => {
       try {
-        await liff.init({ liffId: "{App-Liff-Here}" });
+        await liff.init({ liffId: "2003049957-Rq6ZdvQ4" });
         if (liff.isLoggedIn) {
           await handleLogin();
         }
@@ -40,7 +40,7 @@ const Line = () => {
               name: res.data.payload.user.name,
               role: res.data.payload.user.role,
               token: res.data.token,
-            })
+            }),
           );
           localStorage.setItem("token", res.data.token);
           roleRedirects(res.data.payload.user.role);
