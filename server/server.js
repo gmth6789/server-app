@@ -1,36 +1,55 @@
-const express = require('express')
+require("dotenv").config();
+const expressLayouts = require("express-ejs-layouts");
+const methodOverride = require("method-override");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
-const morgan = require('morgan')
-const cors = require('cors')
-const bodyParse = require('body-parser')
+const express = require("express");
 
-const connectDB = require('./Config/db')
+const morgan = require("morgan");
+const cors = require("cors");
+const bodyParse = require("body-parser");
 
+const connectDB = require("./Config/db");
 
-const { readdirSync } = require('fs')
+const { readdirSync } = require("fs");
 // const productRouters = require('./Routes/product')
 // const authRouters = require('./Routes/auth')
 
 const app = express();
+const port = 6000 || process.env.PORT;
 
-connectDB()
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+    //cookie: { maxAge: new Date ( Date.now() + (3600000) ) }
+    // Date.now() - 30 * 24 * 60 * 60 * 1000
+  }),
+);
 
-app.use(morgan('dev'))
-app.use(cors())
-app.use(bodyParse.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
+// Conntect to Database
+connectDB();
 
-// Route 1
-// app.get('/product', (req, res) => {
-//     res.send('Hello Endpoint 555')
-// })
+app.use(morgan("dev"));
+app.use(cors());
+app.use(bodyParse.json({ limit: "10mb" }));
 
-// Route 2
-// app.use('/api', productRouters)
-// app.use('/api', authRouters)
+app.use(express.static("public"));
 
-// Route 3
-readdirSync('./Routes')
-    .map((r) => app.use('/api', require('./Routes/' + r)))
+app.use(expressLayouts);
+app.set("layout", "./layouts/main");
+app.set("view engine", "ejs");
 
+readdirSync("./Routes").map((r) => app.use("/api", require("./Routes/" + r)));
 
-app.listen(5000, () => console.log('Server is Running 5000'))
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
