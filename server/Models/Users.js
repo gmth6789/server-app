@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema(
     picture: String,
     displayName: String,
     ip: String,
+    email: String,
   },
   { timestamps: true },
 );
