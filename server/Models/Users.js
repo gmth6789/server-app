@@ -12,10 +12,9 @@ const userSchema = mongoose.Schema(
     },
     picture: String,
     displayName: String,
-    ip:String,
-    email:String,
+    ip: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("users", userSchema);

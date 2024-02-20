@@ -5,7 +5,7 @@ const { token } = require("morgan");
 
 const { notifyLine, getIPClient } = require("../Functions/Notify");
 
-const tokenLine = "{Token-LineNotify-Here}";
+const tokenLine = "nVLUFLWv3rQAi89uqRSZooGUSBP5vC9gk7lM40bkWuC";
 
 exports.register = async (req, res) => {
   try {
@@ -87,39 +87,6 @@ exports.loginLine = async (req, res) => {
     };
     // 1 Check
     var user = await User.findOneAndUpdate({ name: userId }, { new: true });
-    if (user) {
-      console.log("User Updated!!!");
-    } else {
-      user = new User(data);
-      await user.save();
-    }
-    // 2. Payload
-    var payload = {
-      user,
-    };
-    // console.log(payload)
-    // 3. Generate
-    jwt.sign(payload, "jwtsecret", { expiresIn: "1d" }, (err, token) => {
-      if (err) throw err;
-      res.json({ token, payload });
-    });
-  } catch (err) {
-    //code
-    console.log(err);
-    res.status(500).send("Server Error");
-  }
-};
-exports.loginFacebook = async (req, res) => {
-  try {
-    //code
-    const { userID, name, email } = req.body;
-    var data = {
-      name: userID,
-      displayName: name,
-      email: email,
-    };
-    // 1 Check
-    var user = await User.findOneAndUpdate({ name: userID }, { new: true });
     if (user) {
       console.log("User Updated!!!");
     } else {

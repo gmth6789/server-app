@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 // function
-import { login, loginFacebook } from "../../../functions/auth";
+import { login } from "../../../functions/auth";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
@@ -22,11 +22,10 @@ import { login as loginRedux } from "../../../store/userSlice";
 
 // Login Line
 import liff from "@line/liff";
-// Login Facebook
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import { BsFacebook,BsLine } from 'react-icons/bs';
 
-import { toast } from 'react-toastify';
+import { BsLine } from "react-icons/bs";
+
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -79,20 +78,22 @@ export default function Login() {
     login(tam)
       .then((res) => {
         console.log(res.data.payload.user.name);
-        toast.success('User '+res.data.payload.user.name+ ' Login Success');
+        toast.success("User " + res.data.payload.user.name + " Login Success");
         dispatch(
           loginRedux({
             name: res.data.payload.user.name,
             role: res.data.payload.user.role,
             token: res.data.token,
-          })
+          }),
         );
         localStorage.setItem("token", res.data.token);
         roleRedirects(res.data.payload.user.role);
       })
-      .catch((err) => toast.error(err.response.data,{
-        position:'top-left'
-      }));
+      .catch((err) =>
+        toast.error(err.response.data, {
+          position: "top-left",
+        }),
+      );
   };
 
   const roleRedirects = (role) => {
@@ -101,24 +102,6 @@ export default function Login() {
     } else {
       navi("/user/index");
     }
-  };
-
-  const responseFacebook = async (response) => {
-    // console.log(response);
-    await loginFacebook(response)
-      .then((res) => {
-        // console.log(res)
-        dispatch(
-          loginRedux({
-            name: res.data.payload.user.name,
-            role: res.data.payload.user.role,
-            token: res.data.token,
-          })
-        );
-        localStorage.setItem("token", res.data.token);
-        roleRedirects(res.data.payload.user.role);
-      })
-      .catch((err) => console.log(err));
   };
 
   return (
@@ -208,25 +191,6 @@ export default function Login() {
               >
                 Sign In With Line
               </Button>
-
-              <FacebookLogin
-                appId="{App-Facebook-Here}"
-                autoLoad={false}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                render={(renderProps) => (
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 2, mb: 2 }}
-                    onClick={renderProps.onClick}
-                    startIcon={<BsFacebook />}
-                  >
-                    SIGN IN WITH Facebook
-                  </Button>
-                )}
-              />
 
               <Grid container>
                 <Grid item xs>

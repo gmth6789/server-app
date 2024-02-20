@@ -1,12 +1,11 @@
-const mongoose = require('mongoose')
-
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 const connectDB = async () => {
-    try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/roitai')
-        console.log('DB Connected')
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-module.exports = connectDB
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    console.log(`Database Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = connectDB;

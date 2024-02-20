@@ -5,8 +5,7 @@ const {
   register,
   login,
   currentUser,
-  loginLine,
-  loginFacebook
+  loginLine
 } = require("../Controllers/auth");
 const { auth, adminCheck } = require("../Middleware/auth");
 
@@ -14,7 +13,6 @@ const { auth, adminCheck } = require("../Middleware/auth");
 router.post("/register", register);
 router.post("/login", login);
 router.post("/login-line", loginLine);
-router.post("/login-facebook", loginFacebook);
 router.post("/current-user", auth, currentUser);
 router.post("/current-admin", auth, adminCheck, currentUser);
 
